@@ -1,6 +1,5 @@
 use bevy::{math::vec3, prelude::*};
 
-#[derive(Component)]
 pub struct AntPlugin;
 
 #[derive(Component)]
