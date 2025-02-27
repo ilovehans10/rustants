@@ -4,7 +4,22 @@ pub struct MovementPlugin;
 
 #[derive(Component)]
 pub enum MovementAI {
-    AntAI,
+    AntAI(MovementInfo),
+}
+
+pub struct MovementInfo {
+    pub max_speed: f32,
+    pub current_speed: f32,
+}
+
+impl Default for MovementInfo {
+    fn default() -> Self {
+        Self {
+            max_speed: 5.0,
+            current_speed: 5.0,
+            //moving_direction: None,
+        }
+    }
 }
 
 impl Plugin for MovementPlugin {
@@ -15,9 +30,12 @@ impl Plugin for MovementPlugin {
 
 fn movement(time: Res<Time>, mut ant_query: Query<(&MovementAI, &mut Transform)>) {
     for (ai, mut transform) in ant_query.iter_mut() {
-        let distance = time.delta_seconds();
         match ai {
-            MovementAI::AntAI => transform.translation += Vec3::new(5.0 * distance, 0.0, 0.0),
+            MovementAI::AntAI(movement_info) => {
+                let distance = time.delta_seconds()
+                    * f32::min(movement_info.current_speed, movement_info.max_speed);
+                transform.translation += vec3(5.0 * distance, 0.0, 0.0)
+            }
         }
     }
 }

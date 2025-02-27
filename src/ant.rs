@@ -1,6 +1,6 @@
 use bevy::{math::vec3, prelude::*};
 
-use crate::movement::MovementAI;
+use crate::movement::{MovementAI, MovementInfo};
 
 pub struct AntPlugin;
 
@@ -30,7 +30,7 @@ impl Default for AntBundle {
                 ..default()
             },
             ant_role: AntRole::Adult,
-            movement_ai: MovementAI::AntAI,
+            movement_ai: MovementAI::AntAI(MovementInfo { ..default() }),
         }
     }
 }
