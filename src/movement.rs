@@ -10,6 +10,15 @@ pub enum MovementAI {
 pub struct MovementInfo {
     pub max_speed: f32,
     pub current_speed: f32,
+    pub moving_direction: Option<Direction>,
+}
+
+#[derive(Clone, Copy)]
+pub enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 impl Default for MovementInfo {
@@ -17,8 +26,21 @@ impl Default for MovementInfo {
         Self {
             max_speed: 5.0,
             current_speed: 5.0,
-            //moving_direction: None,
+            moving_direction: None,
         }
+    }
+}
+
+impl std::ops::Mul<f32> for Direction {
+    type Output = Vec3;
+    fn mul(self, rhs: f32) -> Self::Output {
+        vec3(rhs, rhs, 0.0)
+            * match self {
+                Direction::Up => vec3(1.0, 0.0, 0.0),
+                Direction::Down => vec3(-1.0, 0.0, 0.0),
+                Direction::Left => vec3(0.0, 1.0, 0.0),
+                Direction::Right => vec3(0.0, -1.0, 0.0),
+            }
     }
 }
 
@@ -32,9 +54,11 @@ fn movement(time: Res<Time>, mut ant_query: Query<(&MovementAI, &mut Transform)>
     for (ai, mut transform) in ant_query.iter_mut() {
         match ai {
             MovementAI::AntAI(movement_info) => {
-                let distance = time.delta_seconds()
-                    * f32::min(movement_info.current_speed, movement_info.max_speed);
-                transform.translation += vec3(5.0 * distance, 0.0, 0.0)
+                if let Some(direction) = movement_info.moving_direction {
+                    let distance = time.delta_seconds()
+                        * f32::min(movement_info.current_speed, movement_info.max_speed);
+                    transform.translation += direction * distance;
+                }
             }
         }
     }
