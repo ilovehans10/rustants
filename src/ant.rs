@@ -1,6 +1,6 @@
 use bevy::{math::vec3, prelude::*};
 
-use crate::movement::{Direction, MovementAI, MovementInfo};
+use crate::movement::{AIType, Direction, MovementAI, MovementInfo};
 
 pub struct AntPlugin;
 
@@ -30,7 +30,7 @@ impl Default for AntBundle {
                 ..default()
             },
             ant_role: AntRole::Adult,
-            movement_ai: MovementAI::AntAI(MovementInfo { ..default() }),
+            movement_ai: MovementAI { ..default() },
         }
     }
 }
@@ -44,10 +44,13 @@ impl Plugin for AntPlugin {
 fn spawn_ants(mut commands: Commands) {
     info!("AntPlugin loaded!");
     commands.spawn(AntBundle {
-        movement_ai: MovementAI::AntAI(MovementInfo {
-            moving_direction: Some(Direction::Up),
+        movement_ai: MovementAI {
+            movement_info: MovementInfo {
+                moving_direction: Some(Direction::Up),
+                ..default()
+            },
             ..default()
-        }),
+        },
         ..default()
     });
     commands.spawn(AntBundle {
@@ -56,6 +59,10 @@ fn spawn_ants(mut commands: Commands) {
     });
     commands.spawn(AntBundle {
         ant_role: AntRole::Egg,
+        movement_ai: MovementAI {
+            ai_type: AIType::EggAI,
+            ..default()
+        },
         ..default()
     });
     commands.spawn(AntBundle {

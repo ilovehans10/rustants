@@ -2,9 +2,15 @@ use bevy::{math::vec3, prelude::*};
 
 pub struct MovementPlugin;
 
+pub enum AIType {
+    AntAI,
+    EggAI,
+}
+
 #[derive(Component)]
-pub enum MovementAI {
-    AntAI(MovementInfo),
+pub struct MovementAI {
+    pub ai_type: AIType,
+    pub movement_info: MovementInfo,
 }
 
 pub struct MovementInfo {
@@ -21,6 +27,14 @@ pub enum Direction {
     Right,
 }
 
+impl Default for MovementAI {
+    fn default() -> Self {
+        Self {
+            ai_type: AIType::AntAI,
+            movement_info: MovementInfo { ..default() },
+        }
+    }
+}
 impl Default for MovementInfo {
     fn default() -> Self {
         Self {
@@ -52,13 +66,21 @@ impl Plugin for MovementPlugin {
 
 fn movement(time: Res<Time>, mut ant_query: Query<(&MovementAI, &mut Transform)>) {
     for (ai, mut transform) in ant_query.iter_mut() {
-        match ai {
-            MovementAI::AntAI(movement_info) => {
+        let MovementAI {
+            ai_type,
+            movement_info,
+        } = ai;
+
+        match ai_type {
+            AIType::AntAI => {
                 if let Some(direction) = movement_info.moving_direction {
                     let distance = time.delta_seconds()
                         * f32::min(movement_info.current_speed, movement_info.max_speed);
                     transform.translation += direction * distance;
                 }
+            }
+            AIType::EggAI => {
+                continue;
             }
         }
     }
