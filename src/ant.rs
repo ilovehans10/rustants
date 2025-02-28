@@ -10,6 +10,7 @@ impl Plugin for AntPlugin {
     }
 }
 
+// a marker component that can be queried to find the role of the ant
 #[derive(Component)]
 pub enum AntRole {
     Egg,
@@ -18,6 +19,8 @@ pub enum AntRole {
     Queen,
 }
 
+// a bundle that contains everything needed to create an ant
+// TODO: refactor this into a CreatureBundle that no longer contains a MovementAI
 #[derive(Bundle)]
 struct AntBundle {
     sprite: SpriteBundle,
@@ -25,6 +28,7 @@ struct AntBundle {
     movement_ai: MovementAI,
 }
 
+// a default implementation for AntBundle
 impl Default for AntBundle {
     fn default() -> Self {
         Self {
@@ -41,6 +45,7 @@ impl Default for AntBundle {
     }
 }
 
+// this spawns a test variety of ants
 fn spawn_ants(mut commands: Commands) {
     info!("AntPlugin loaded!");
     commands.spawn(AntBundle {
