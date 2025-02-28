@@ -50,10 +50,10 @@ impl std::ops::Mul<f32> for Direction {
     fn mul(self, rhs: f32) -> Self::Output {
         vec3(rhs, rhs, 0.0)
             * match self {
-                Direction::Up => vec3(1.0, 0.0, 0.0),
-                Direction::Down => vec3(-1.0, 0.0, 0.0),
-                Direction::Left => vec3(0.0, 1.0, 0.0),
-                Direction::Right => vec3(0.0, -1.0, 0.0),
+                Direction::Up => vec3(0.0, 1.0, 0.0),
+                Direction::Down => vec3(0.0, -1.0, 0.0),
+                Direction::Left => vec3(-1.0, 0.0, 0.0),
+                Direction::Right => vec3(1.0, 0.0, 0.0),
             }
     }
 }
