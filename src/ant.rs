@@ -55,6 +55,14 @@ fn spawn_ants(mut commands: Commands) {
     });
     commands.spawn(AntBundle {
         ant_role: AntRole::Grub,
+        movement_ai: MovementAI {
+            movement_info: MovementInfo {
+                max_speed: 1.0,
+                current_speed: 1.0,
+                moving_direction: Some(Direction::Left),
+            },
+            ..default()
+        },
         ..default()
     });
     commands.spawn(AntBundle {
@@ -67,6 +75,14 @@ fn spawn_ants(mut commands: Commands) {
     });
     commands.spawn(AntBundle {
         ant_role: AntRole::Queen,
+        movement_ai: MovementAI {
+            movement_info: MovementInfo {
+                max_speed: 2.0,
+                current_speed: 2.0,
+                moving_direction: Some(Direction::Down),
+            },
+            ..default()
+        },
         ..default()
     });
 }
