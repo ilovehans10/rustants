@@ -1,9 +1,11 @@
 use bevy::prelude::*;
 
 mod ant;
+mod grid;
 mod movement;
 
 use ant::AntPlugin;
+use grid::GridPlugin;
 use movement::MovementPlugin;
 
 #[derive(Component)]
@@ -15,7 +17,7 @@ fn setup_camera(mut commands: Commands) {
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, AntPlugin, MovementPlugin))
+        .add_plugins((DefaultPlugins, AntPlugin, GridPlugin, MovementPlugin))
         .add_systems(Startup, setup_camera)
         .run();
 }
