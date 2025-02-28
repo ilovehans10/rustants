@@ -1,8 +1,9 @@
 use bevy::prelude::*;
 
 mod ant;
-use ant::AntPlugin;
 mod movement;
+
+use ant::AntPlugin;
 use movement::MovementPlugin;
 
 #[derive(Component)]
