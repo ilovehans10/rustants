@@ -2,6 +2,12 @@ use bevy::{math::vec3, prelude::*};
 
 pub struct MovementPlugin;
 
+impl Plugin for MovementPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, movement);
+    }
+}
+
 pub enum AIType {
     AntAI,
     EggAI,
@@ -55,12 +61,6 @@ impl std::ops::Mul<f32> for Direction {
                 Direction::Left => vec3(-1.0, 0.0, 0.0),
                 Direction::Right => vec3(1.0, 0.0, 0.0),
             }
-    }
-}
-
-impl Plugin for MovementPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, movement);
     }
 }
 

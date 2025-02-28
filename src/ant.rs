@@ -4,6 +4,12 @@ use crate::movement::{AIType, Direction, MovementAI, MovementInfo};
 
 pub struct AntPlugin;
 
+impl Plugin for AntPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, spawn_ants);
+    }
+}
+
 #[derive(Component)]
 pub enum AntRole {
     Egg,
@@ -32,12 +38,6 @@ impl Default for AntBundle {
             ant_role: AntRole::Adult,
             movement_ai: MovementAI { ..default() },
         }
-    }
-}
-
-impl Plugin for AntPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_ants);
     }
 }
 
