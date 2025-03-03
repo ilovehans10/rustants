@@ -1,12 +1,12 @@
 use bevy::prelude::*;
 
+pub struct GridPlugin;
+
 impl Plugin for GridPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, make_grid);
     }
 }
-
-pub struct GridPlugin;
 
 // TheGrid is used for trakcing the grid map that ants move on and dirt is placed on
 #[derive(Resource)]
