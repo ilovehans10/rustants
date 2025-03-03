@@ -10,12 +10,22 @@ pub struct GridPlugin;
 
 #[derive(Resource)]
 pub struct TheGrid {
-    pub grid: Vec<GridLocation>,
+    pub grid: Vec<GridCell>,
     pub height: usize,
     pub width: usize,
 }
 
-pub struct GridLocation {}
+#[derive(Bundle)]
+pub struct GridCell {
+    location: GridLocation,
+    sprite: SpriteBundle,
+}
+
+#[derive(Component)]
+pub struct GridLocation {
+    pub x: usize,
+    pub y: usize,
+}
 
 impl Default for TheGrid {
     fn default() -> Self {
