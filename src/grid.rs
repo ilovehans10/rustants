@@ -24,10 +24,28 @@ pub struct GridCell {
 }
 
 // A GridLocation is used as cordinates for the map at large
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct GridLocation {
     pub x: usize,
     pub y: usize,
+}
+
+impl std::cmp::PartialEq for GridLocation {
+    fn eq(&self, lhs: &GridLocation) -> bool {
+        let GridLocation { x: lhs_x, y: lhs_y } = lhs;
+        let GridLocation { x: rhs_x, y: rhs_y } = self;
+        lhs_x == rhs_x && lhs_y == rhs_y
+    }
+}
+
+fn get_cords_from_index(height: usize, width: usize, index: usize) -> Option<GridLocation> {
+    if height * width <= index {
+        return None;
+    }
+    Some(GridLocation {
+        x: index % height,
+        y: index / width,
+    })
 }
 
 // Sets up a default 5x5 grid
@@ -35,8 +53,15 @@ pub struct GridLocation {
 impl Default for TheGrid {
     fn default() -> Self {
         let (height, width) = (5, 5);
+        let mut grid = Vec::with_capacity(height * width);
+        for index in 0..=height * width - 1 {
+            grid.push(GridCell {
+                location: get_cords_from_index(height, width, index).unwrap(),
+                sprite: SpriteBundle { ..default() },
+            })
+        }
         TheGrid {
-            grid: Vec::with_capacity(height * width),
+            grid,
             height,
             width,
         }
@@ -46,4 +71,29 @@ impl Default for TheGrid {
 // initializes the grid for the world
 fn make_grid(mut commands: Commands) {
     commands.init_resource::<TheGrid>();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn check_get_cords_from_index() {
+        assert_eq!(
+            get_cords_from_index(5, 5, 0),
+            Some(GridLocation { x: 0, y: 0 })
+        );
+        assert_eq!(
+            get_cords_from_index(5, 5, 1),
+            Some(GridLocation { x: 1, y: 0 })
+        );
+        assert_eq!(
+            get_cords_from_index(5, 5, 5),
+            Some(GridLocation { x: 0, y: 1 })
+        );
+        assert_eq!(
+            get_cords_from_index(5, 5, 6),
+            Some(GridLocation { x: 1, y: 1 })
+        );
+        assert_eq!(get_cords_from_index(5, 5, 25), None);
+    }
 }
