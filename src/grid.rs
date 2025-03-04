@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{math::vec3, prelude::*};
 
 pub struct GridPlugin;
 
@@ -48,6 +48,10 @@ fn get_grid_cords_from_index(height: usize, width: usize, index: usize) -> Optio
     })
 }
 
+fn get_world_cords_from_index(height: usize, width: usize, index: usize) -> Option<Vec3> {
+    Some(vec3(30.0, 0.0, 0.0))
+}
+
 // Sets up a default 5x5 grid
 // TODO: make this fill the whole window with a grid
 impl Default for TheGrid {
@@ -57,7 +61,14 @@ impl Default for TheGrid {
         for index in 0..=height * width - 1 {
             grid.push(GridCell {
                 location: get_grid_cords_from_index(height, width, index).unwrap(),
-                sprite: SpriteBundle { ..default() },
+                sprite: SpriteBundle {
+                    transform: Transform {
+                        scale: vec3(10.0, 10.0, 0.0),
+                        translation: get_world_cords_from_index(height, width, index).unwrap(),
+                        ..default()
+                    },
+                    ..default()
+                },
             })
         }
         TheGrid {
