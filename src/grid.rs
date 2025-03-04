@@ -9,7 +9,7 @@ impl Plugin for GridPlugin {
 }
 
 // TheGrid is used for trakcing the grid map that ants move on and dirt is placed on
-#[derive(Resource)]
+#[derive(Component)]
 pub struct TheGrid {
     pub grid: Vec<GridCell>,
     pub height: usize,
@@ -70,7 +70,7 @@ impl Default for TheGrid {
 
 // initializes the grid for the world
 fn make_grid(mut commands: Commands) {
-    commands.init_resource::<TheGrid>();
+    commands.spawn(TheGrid { ..default() });
 }
 
 #[cfg(test)]
