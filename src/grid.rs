@@ -38,7 +38,7 @@ impl std::cmp::PartialEq for GridLocation {
     }
 }
 
-fn get_cords_from_index(height: usize, width: usize, index: usize) -> Option<GridLocation> {
+fn get_grid_cords_from_index(height: usize, width: usize, index: usize) -> Option<GridLocation> {
     if height * width <= index {
         return None;
     }
@@ -56,7 +56,7 @@ impl Default for TheGrid {
         let mut grid = Vec::with_capacity(height * width);
         for index in 0..=height * width - 1 {
             grid.push(GridCell {
-                location: get_cords_from_index(height, width, index).unwrap(),
+                location: get_grid_cords_from_index(height, width, index).unwrap(),
                 sprite: SpriteBundle { ..default() },
             })
         }
@@ -79,21 +79,21 @@ mod tests {
     #[test]
     fn check_get_cords_from_index() {
         assert_eq!(
-            get_cords_from_index(5, 5, 0),
+            get_grid_cords_from_index(5, 5, 0),
             Some(GridLocation { x: 0, y: 0 })
         );
         assert_eq!(
-            get_cords_from_index(5, 5, 1),
+            get_grid_cords_from_index(5, 5, 1),
             Some(GridLocation { x: 1, y: 0 })
         );
         assert_eq!(
-            get_cords_from_index(5, 5, 5),
+            get_grid_cords_from_index(5, 5, 5),
             Some(GridLocation { x: 0, y: 1 })
         );
         assert_eq!(
-            get_cords_from_index(5, 5, 6),
+            get_grid_cords_from_index(5, 5, 6),
             Some(GridLocation { x: 1, y: 1 })
         );
-        assert_eq!(get_cords_from_index(5, 5, 25), None);
+        assert_eq!(get_grid_cords_from_index(5, 5, 25), None);
     }
 }
