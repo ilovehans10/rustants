@@ -46,7 +46,7 @@ fn get_grid_cords_from_index(height: usize, width: usize, index: usize) -> Optio
         return None;
     }
     Some(GridLocation {
-        x: index % height,
+        x: index % width,
         y: index / width,
     })
 }
