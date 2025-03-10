@@ -1,4 +1,8 @@
 use bevy::{math::vec3, prelude::*};
+use std::cmp::Ordering;
+
+const GRID_CELL_SIZE: f32 = 20.0;
+const GRID_SPRITE_SIZE: f32 = GRID_CELL_SIZE - 1.0;
 
 pub struct GridPlugin;
 
@@ -48,7 +52,32 @@ fn get_grid_cords_from_index(height: usize, width: usize, index: usize) -> Optio
 }
 
 fn get_world_cords_from_index(height: usize, width: usize, index: usize) -> Option<Vec3> {
-    Some(vec3(30.0, 0.0, 0.0))
+    assert!(height % 2 == 1);
+    assert!(width % 2 == 1);
+    if index > width * height {
+        return None;
+    }
+
+    let grid_center = (height * width) / 2;
+    let GridLocation { x: mid_x, y: mid_y } =
+        get_grid_cords_from_index(height, width, grid_center).unwrap();
+    let GridLocation {
+        x: current_x,
+        y: current_y,
+    } = get_grid_cords_from_index(height, width, index).unwrap();
+    let final_cords_x = match mid_x.cmp(&current_x) {
+        Ordering::Less => (current_x - mid_x) as f32 * -GRID_CELL_SIZE,
+        Ordering::Greater => (mid_x - current_x) as f32 * GRID_CELL_SIZE,
+        Ordering::Equal => 0.0,
+    };
+    let final_cords_y = match mid_y.cmp(&current_y) {
+        Ordering::Less => (current_y - mid_y) as f32 * -GRID_CELL_SIZE,
+        Ordering::Greater => (mid_y - current_y) as f32 * GRID_CELL_SIZE,
+        Ordering::Equal => 0.0,
+    };
+
+    println!("{mid_x}, {mid_x}  {current_x}, {current_y}  {final_cords_x}, {final_cords_y}");
+    Some(vec3(final_cords_x, final_cords_y, 0.0))
 }
 
 // Sets up a default 5 by 5 grid
@@ -70,8 +99,8 @@ fn generate_the_grid(height: usize, width: usize) -> Vec<GridCell> {
             location: get_grid_cords_from_index(height, width, index).unwrap(),
             sprite: SpriteBundle {
                 transform: Transform {
-                    scale: vec3(10.0, 10.0, 0.0),
-                    //translation: get_world_cords_from_index(height, width, index).unwrap(),
+                    scale: vec3(GRID_SPRITE_SIZE, GRID_SPRITE_SIZE, 0.0),
+                    translation: get_world_cords_from_index(height, width, index).unwrap(),
                     ..default()
                 },
                 ..default()
