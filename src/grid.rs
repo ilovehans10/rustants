@@ -51,7 +51,7 @@ fn get_world_cords_from_index(height: usize, width: usize, index: usize) -> Opti
     Some(vec3(30.0, 0.0, 0.0))
 }
 
-// Sets up a default 5x5 grid
+// Sets up a default 5 by 5 grid
 // TODO: make this fill the whole window with a grid
 impl Default for GridInfo {
     fn default() -> Self {
