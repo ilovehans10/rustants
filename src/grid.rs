@@ -76,7 +76,6 @@ fn get_world_cords_from_index(height: usize, width: usize, index: usize) -> Opti
         Ordering::Equal => 0.0,
     };
 
-    println!("{mid_x}, {mid_x}  {current_x}, {current_y}  {final_cords_x}, {final_cords_y}");
     Some(vec3(final_cords_x, final_cords_y, 0.0))
 }
 
