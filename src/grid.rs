@@ -112,7 +112,8 @@ fn generate_the_grid(height: usize, width: usize) -> Vec<GridCell> {
 // initializes the grid for the world
 fn make_grid(mut commands: Commands) {
     commands.spawn(GridInfo { ..default() });
-    commands.spawn_batch(generate_the_grid(5, 5));
+    // TODO: make this work better with window scaling
+    commands.spawn_batch(generate_the_grid(35, 63));
 }
 
 #[cfg(test)]
