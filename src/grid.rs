@@ -10,8 +10,7 @@ impl Plugin for GridPlugin {
 
 // TheGrid is used for trakcing the grid map that ants move on and dirt is placed on
 #[derive(Component)]
-pub struct TheGrid {
-    pub grid: Vec<GridCell>,
+pub struct GridInfo {
     pub height: usize,
     pub width: usize,
 }
@@ -54,34 +53,38 @@ fn get_world_cords_from_index(height: usize, width: usize, index: usize) -> Opti
 
 // Sets up a default 5x5 grid
 // TODO: make this fill the whole window with a grid
-impl Default for TheGrid {
+impl Default for GridInfo {
     fn default() -> Self {
-        let (height, width) = (5, 5);
-        let mut grid = Vec::with_capacity(height * width);
-        for index in 0..=height * width - 1 {
-            grid.push(GridCell {
-                location: get_grid_cords_from_index(height, width, index).unwrap(),
-                sprite: SpriteBundle {
-                    transform: Transform {
-                        scale: vec3(10.0, 10.0, 0.0),
-                        translation: get_world_cords_from_index(height, width, index).unwrap(),
-                        ..default()
-                    },
-                    ..default()
-                },
-            })
-        }
-        TheGrid {
-            grid,
-            height,
-            width,
+        GridInfo {
+            height: 5,
+            width: 5,
         }
     }
 }
 
+// Generates all the grid cells for the grid window
+fn generate_the_grid(height: usize, width: usize) -> Vec<GridCell> {
+    let mut grid = Vec::with_capacity(height * width);
+    for index in 0..=height * width - 1 {
+        grid.push(GridCell {
+            location: get_grid_cords_from_index(height, width, index).unwrap(),
+            sprite: SpriteBundle {
+                transform: Transform {
+                    scale: vec3(10.0, 10.0, 0.0),
+                    //translation: get_world_cords_from_index(height, width, index).unwrap(),
+                    ..default()
+                },
+                ..default()
+            },
+        })
+    }
+    grid
+}
+
 // initializes the grid for the world
 fn make_grid(mut commands: Commands) {
-    commands.spawn(TheGrid { ..default() });
+    commands.spawn(GridInfo { ..default() });
+    commands.spawn_batch(generate_the_grid(5, 5));
 }
 
 #[cfg(test)]
